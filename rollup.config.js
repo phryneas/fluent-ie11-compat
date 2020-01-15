@@ -23,7 +23,7 @@ module.exports = {
         [
           "replace-identifiers",
           {
-            RegExp: 'window["__fluent__PolyfilledRegExp"]'
+            RegExp: 'window["__fluent__RegExp"]'
           }
         ]
       ]

@@ -1,37 +1,46 @@
-export class PolyfilledRegExp {
-  constructor(regex, flags) {
-    let rxInstance = new window["RegExp"](regex, flags.replace("y", "g"));
+window["__fluent__RegExp"] = window["RegExp"];
+try {
+  new window["RegExp"](".", "y");
+  if (window["__test__fluent__RegExp"]) {
+    throw "Force Polyfill in test environment";
+  }
+} catch {
+  console.info("Using RegExp wrapper to polyfill `y` flag functionality.");
 
-    if (flags.indexOf("y") === -1) {
-      return rxInstance;
+  class PolyfilledRegExp {
+    constructor(regex, flags) {
+      let rxInstance = new window["RegExp"](regex, flags.replace("y", "g"));
+
+      if (flags.indexOf("y") === -1) {
+        return rxInstance;
+      }
+
+      this.rxInstance = rxInstance;
+
+      /*
+        console.log(
+          "created new PolyfilledRegExp(%s, %s -> %s); %s",
+          regex,
+          flags,
+          flags.replace("y", "g"),
+          flags.indexOf("y") === -1 ? "using original RegExp" : "using Polyfill"
+        );
+        */
+
+      Object.defineProperty(this, "sticky", { value: true, readonly: true });
     }
 
-    this.rxInstance = rxInstance;
+    get lastIndex() {
+      return this.rxInstance.lastIndex;
+    }
+    set lastIndex(value) {
+      this.rxInstance.lastIndex = value;
+    }
 
-    /*
-    console.log(
-      "created new PolyfilledRegExp(%s, %s -> %s); %s",
-      regex,
-      flags,
-      flags.replace("y", "g"),
-      flags.indexOf("y") === -1 ? "using original RegExp" : "using Polyfill"
-    );
-    */
-
-    Object.defineProperty(this, "sticky", { value: true, readonly: true });
-  }
-
-  get lastIndex() {
-    return this.rxInstance.lastIndex;
-  }
-  set lastIndex(value) {
-    this.rxInstance.lastIndex = value;
-  }
-
-  exec(str) {
-    const lastIndex = this.lastIndex;
-    const result = this.rxInstance.exec(str);
-    /*
+    exec(str) {
+      const lastIndex = this.lastIndex;
+      const result = this.rxInstance.exec(str);
+      /*
     console.log(
       "running exec(%s) with result %o (%s). lastIndex was %d before (matched at %d), is now %d",
       str,
@@ -42,17 +51,18 @@ export class PolyfilledRegExp {
       this.lastIndex
     );
     */
-    if (!result || result.index !== lastIndex) {
-      this.rxInstance.lastIndex = 0;
-      return null;
+      if (!result || result.index !== lastIndex) {
+        this.rxInstance.lastIndex = 0;
+        return null;
+      }
+      return result;
     }
-    return result;
+
+    test(str) {
+      // console.log("running test(%s)", str);
+      return !!this.exec(str);
+    }
   }
 
-  test(str) {
-    // console.log("running test(%s)", str);
-    return !!this.exec(str);
-  }
+  window["__fluent__RegExp"] = PolyfilledRegExp;
 }
-
-window["__fluent__PolyfilledRegExp"] = PolyfilledRegExp;

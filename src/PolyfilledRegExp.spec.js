@@ -1,4 +1,6 @@
-const { PolyfilledRegExp } = require("./PolyfilledRegExp");
+window["__test__fluent__RegExp"] = true;
+require("./PolyfilledRegExp");
+const PolyfilledRegExp = window["__fluent__RegExp"];
 
 test("documented behaviour", () => {
   var str = "#foo#";
