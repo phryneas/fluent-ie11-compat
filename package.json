@@ -1,0 +1,23 @@
+{
+  "name": "fluent-ie11-compat",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "@rollup/plugin-multi-entry": "^3.0.0",
+    "babel-jest": "^24.9.0",
+    "babel-plugin-replace-identifiers": "^0.1.1",
+    "core-js": "3",
+    "jest": "^24.9.0",
+    "prettier": "^1.19.1",
+    "rollup": "^1.29.0",
+    "rollup-plugin-babel": "^4.3.3"
+  },
+  "scripts": {
+    "test": "jest",
+    "build": "rollup -c"
+  },
+  "browserslist": "defaults, ie 11"
+}
