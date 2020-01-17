@@ -1,11 +1,24 @@
 window["__fluent__RegExp"] = window["RegExp"];
+import {
+  UNSUPPORTED_Y,
+  BROKEN_CARET
+} from "core-js/internals/regexp-sticky-helpers";
+
 try {
   new window["RegExp"](".", "y");
-  if (window["__test__fluent__RegExp"]) {
-    throw "Force Polyfill in test environment";
+
+  if (UNSUPPORTED_Y || BROKEN_CARET) {
+    throw "core-js would polyfill, but our implementation is more performant";
   }
-} catch {
-  console.info("Using RegExp wrapper to polyfill `y` flag functionality.");
+
+  if (window["__test__fluent__RegExp"]) {
+    throw "forcing polyfill in test environment";
+  }
+} catch (e) {
+  console.info(
+    "Using RegExp wrapper to polyfill `y` flag functionality. (%s)",
+    e
+  );
 
   class PolyfilledRegExp {
     constructor(regex, flags) {
