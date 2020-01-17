@@ -1,6 +1,6 @@
 {
   "name": "@phryneas/fluent-ie11-compat",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "main": "dist/index.js",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
@@ -14,7 +14,6 @@
     "@rollup/plugin-multi-entry": "^3.0.0",
     "babel-jest": "^24.9.0",
     "babel-plugin-replace-identifiers": "^0.1.1",
-    "core-js": "3",
     "jest": "^24.9.0",
     "prettier": "^1.19.1",
     "rollup": "^1.29.0",
@@ -24,5 +23,8 @@
     "test": "jest",
     "build": "rollup -c"
   },
-  "browserslist": "defaults, ie 11"
+  "browserslist": "defaults, ie 11",
+  "dependencies": {
+    "core-js": "^3.6.4"
+  }
 }
